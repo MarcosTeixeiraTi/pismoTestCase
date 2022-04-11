@@ -4,14 +4,30 @@
 
 ## Descrição do projeto
   
-  1 - Checkout do Projeto
-  2 - mvn clean install no terminal do projeto para baixar as dependências utilizadas
-  3 - mvn spring-boot:run para executar.
+  Etapa do teste prático do processo da Pismo.
   
-## Testando
+## 🛠️ Abrir e rodar o projeto
+
+  - Baixar o projeto.
+  - Executar no terminal ``mvn clean install`` para baixar todas dependências e criar o banco de dados.
+  - ``mvn spring-boor:run`` para rodar o projeto.
+
+## 📁 Acessando os endpoints
 
   Realizar os testes utilizando algum software como o Insomnia ou o Postman.
   
 ## Swagger (springdoc)
 
   A api também está disponibilizada via swagger http://localhost:8080/swagger-ui/index.html
+  
+## ✔️ Técnicas e tecnologias utilizadas
+
+- ``Java 11``
+- ``Eclipse``
+- ``PostgreSQL``
+-
+
+:construction: Ainda em construção :construction:
+
+- Testes com RestAssured. Também cogitei usar o JUnit + mockito.
+- Batch para fácil execução do projeto
