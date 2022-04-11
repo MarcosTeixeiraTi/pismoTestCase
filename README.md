@@ -30,4 +30,4 @@
 :construction: Ainda em construção :construction:
 
 - Testes com RestAssured. Também cogitei usar o JUnit + mockito.
-- Batch para fácil execução do projeto
+- DOCKERFILE
