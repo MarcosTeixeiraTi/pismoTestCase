@@ -1,11 +1,18 @@
 package com.pismo.ptt.controller;
 
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.pismo.ptt.model.Account;
 import com.pismo.ptt.repository.AccountRepository;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -53,27 +60,30 @@ public class AccountControllerTest {
 //						.status(HttpStatus.CREATED);
 //	}
 //
-//	@Test
-//	public void givenAccountId_whenFindAccountByID_thenGetCode200() throws Exception {
-//		
-//		RestAssuredMockMvc
-//					.given()
-//						.contentType("application/json")
-//					.when()
-//						.get("/api/v1.0.0/accounts/{accountID}", 1L)
-//					.then()
-//						.status(HttpStatus.OK);
-//	}
-//
-//	@Test
-//	public void givenAccountId_whenFindAccountByIDNotExists_thenGetCode404() throws Exception {
-//		when(accountRepository.findById(84L)).thenReturn(null);
-//		
-//		RestAssuredMockMvc
-//					.when()
-//						.get("/api/v1.0.0/accounts/{accountID}", 42L)
-//					.then()
-//						.status(HttpStatus.NOT_FOUND);
-//	}
+	@Test
+	public void givenAccountId_whenFindAccountByID_thenGetCode200() throws Exception {
+		when(accountRepository.findById(84L)).thenReturn(Optional.of(new Account(84L, "12345678900", LocalDateTime.now())));
+		
+		RestAssuredMockMvc
+					.given()
+						.contentType("application/json")
+					.when()
+						.get("http://localhost:8080/api/v1.0.0/accounts/" + 84L)
+					.then()
+						.statusCode(200);
+	}
+	
+	@Test
+	public void givenAccountId_whenFindAccountByIDNotExists_thenGetCode404() throws Exception {
+		when(accountRepository.findById(84L)).thenReturn(Optional.of(new Account(84L, "12345678900", LocalDateTime.now())));
+		
+		RestAssuredMockMvc
+					.given()
+						.contentType("application/json")
+					.when()
+						.get("http://localhost:8080/api/v1.0.0/accounts/" + 6L)
+					.then()
+						.statusCode(404);
+	}
 
 }
