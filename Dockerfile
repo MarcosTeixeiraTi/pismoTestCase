@@ -1,6 +1,6 @@
 FROM openjdk:11
 
-COPY target/ptt-0.0.1-SNAPSHOT.jar
+COPY target/ptt-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8080
 

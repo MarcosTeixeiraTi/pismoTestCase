@@ -3,6 +3,8 @@ package com.pismo.ptt.controller;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,8 +33,9 @@ public class TransactionController {
 
 	@Operation(summary = "Criação de uma nova transação.")
 	@PostMapping("")
-	public Transaction createTransaction(@RequestBody TransactionDTO transactionDTO) {
-		return this.transactionRepository.save(createClassFromDTO(transactionDTO));
+	public ResponseEntity<Transaction> createTransaction(@RequestBody TransactionDTO transactionDTO) {
+		Transaction t = this.transactionRepository.save(createClassFromDTO(transactionDTO));
+		return new ResponseEntity<>(t, HttpStatus.CREATED);
 	}
 
 	private Transaction createClassFromDTO(TransactionDTO transactionDTO) {
@@ -40,8 +43,7 @@ public class TransactionController {
 		
 		try {
 			newTransaction.setAccount(accountRepository.findById(transactionDTO.getAccountId())
-					.orElseThrow(() -> new AccountNotFoundException(
-							"Conta não encontrada. Não foi possível realizar a transação.")));
+					.orElseThrow(() -> new AccountNotFoundException()));
 		} catch (AccountNotFoundException e) {
 			e.printStackTrace();
 			return null;
