@@ -43,6 +43,7 @@ public class AccountController {
 	@Operation(summary = "Consulta de informações de uma conta pelo ID.")
 	@GetMapping("/{accountId}")
 	public Account findAccountById(@Parameter(description = "Id da conta procurada") @PathVariable("accountId") Long accountId) {
+		
 		try {
 			return accountRepository.findById(accountId).orElseThrow(() -> new AccountNotFoundException("Conta não encontrada"));
 		} catch (AccountNotFoundException e) {

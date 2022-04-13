@@ -14,6 +14,7 @@ import com.pismo.ptt.model.Transaction;
 import com.pismo.ptt.repository.AccountRepository;
 import com.pismo.ptt.repository.TransactionRepository;
 import com.pismo.ptt.utils.converters.OperationTypeConverter;
+import com.pismo.ptt.utils.enums.OperationTypeEnum;
 import com.pismo.ptt.utils.exceptions.AccountNotFoundException;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,9 +32,11 @@ public class TransactionController {
 	@Operation(summary = "Criação de uma nova transação.")
 	@PostMapping("")
 	public Transaction createTransaction(@RequestBody TransactionDTO transactionDTO) {
+		return this.transactionRepository.save(createClassFromDTO(transactionDTO));
+	}
 
+	private Transaction createClassFromDTO(TransactionDTO transactionDTO) {
 		Transaction newTransaction = new Transaction();
-		OperationTypeConverter converter = new OperationTypeConverter();
 		
 		try {
 			newTransaction.setAccount(accountRepository.findById(transactionDTO.getAccountId())
@@ -41,12 +44,25 @@ public class TransactionController {
 							"Conta não encontrada. Não foi possível realizar a transação.")));
 		} catch (AccountNotFoundException e) {
 			e.printStackTrace();
+			return null;
 		}
 		
-		newTransaction.setOperationTypeId(converter.convertToEntityAttribute(transactionDTO.getOperationTypeId()));
-		newTransaction.setAmount(transactionDTO.getAmount());
+		setOperationTypeAndAmount(transactionDTO, newTransaction);
 		newTransaction.setEventDate(LocalDateTime.now());
-		return this.transactionRepository.save(newTransaction);
+		
+		return newTransaction;
+	}
+
+	private void setOperationTypeAndAmount(TransactionDTO transactionDTO, Transaction newTransaction) {
+		OperationTypeEnum operationType = new OperationTypeConverter().convertToEntityAttribute(transactionDTO.getOperationTypeId());
+		
+		newTransaction.setOperationTypeId(operationType);
+		
+		if(operationType.getOperationPositive()) {
+			newTransaction.setAmount(transactionDTO.getAmount());
+		} else {
+			newTransaction.setAmount(transactionDTO.getAmount().negate());
+		}
 	}
 
 }
