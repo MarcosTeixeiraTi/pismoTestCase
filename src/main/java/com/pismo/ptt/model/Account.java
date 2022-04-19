@@ -1,6 +1,7 @@
 package com.pismo.ptt.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
@@ -39,6 +40,9 @@ public class Account implements Serializable {
 	@NotNull
 	@Size(min = 0, max = 11)
 	private String documentNumber;
+	
+	@NotNull
+	private BigDecimal availableCreditLimit;
 
 	@NotNull
 	private LocalDateTime createDate;
